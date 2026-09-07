@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-beta-service
+spec:
+  selector:
+    agent: beta
+  ports:
+    - protocol: TCP               #hier muss ein transortprotokoll stehen, also UDP oder TCP, nicht HTTP
+      port: 50000
+      targetPort: 50000

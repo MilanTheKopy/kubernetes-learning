@@ -1,0 +1,54 @@
+#hier wird ein deployment konfiguriert
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels: #all pods with all these labels belong to this depl. pods can have more labels but they need all these to match the depl
+    app: webapp
+spec:
+  replicas: 1 #how many pods are created from the blueprint
+  selector:
+    matchLabels:
+      app: webapp
+  template: #template is a blueprint for the pods, there is exactly one of "template" per depl
+    metadata:
+      labels:
+        app: webapp #a label can be the same for multiple pods of the same kind, optional for other things than pods
+    spec:
+      containers: #hier werden die container spezifiziert 
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0 #https://hub.docker.com/r/nanajanashia/k8s-demo-app/tags
+        ports:
+        - containerPort: 3000 #standard mongo port
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret #this is a yaml we defined
+              key: mongo-user #defined in the file
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret #this is a yaml we defined
+              key: mongo-password #defined in the file
+        - name: DB_URL
+          valueFrom: #reference to file mongo-config with field mongo-url
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+
+---
+#so koennen mehrere definitionen in eine YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  selector:
+    app: webapp #this label is defined for the pods in mongo.yaml, so the service knows whose messages it is supposed to forward
+  ports: 
+    - protocol: TCP
+      port: 3000 #port des services, worüber dieser vom master angesprochen wird, es ist schuoen den targetportdafuer zu nehmen muss aber nicht
+      targetPort: 3000 #has to be the same as the container port, port zur kommunikation mit den anzusprechenden pods
+      nodePort: 30100 #has to be in range [30000, 32767]

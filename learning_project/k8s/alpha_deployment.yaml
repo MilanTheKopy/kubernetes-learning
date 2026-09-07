@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-alpha
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      agent: alpha                      #welche pods beziehen sich auf dieses Deployment
+
+  template:
+    metadata:
+      labels:
+        agent: alpha
+
+    spec:
+      containers:
+        - name: agent
+          image: agent-image:1.0
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 50000      #welche werden im Deployment erzeugt
+
+          env:
+            - name: AGENT_NAME
+              value: alpha
+
+            - name: TARGET_HOST
+              value: agent-beta-service
+        
+        - name: debug
+          image: debug-image:1.0
+          imagePullPolicy: Never
+
+

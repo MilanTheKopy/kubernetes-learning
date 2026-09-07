@@ -1,0 +1,35 @@
+https://kubernetes.io/docs/home/
+
+minikube start --driver docker              start new minikube cluster in a docker container
+minikube status                             zeigt den status des laufenden minikube clusters an
+minikube service web-gateway-nginx --url    gibt dir die url eines service
+minikube addons enable ingress              muss man machen fuer ingresse zu nutzen
+kubectl --help                              hilfe anzeigen
+kubectl get node                            zeigt alle laufenden nodes im cluster
+kubectl config current-context              zeigt das cluster an, auf das sich commands gerade beziehen
+kubectl config get-contexts                 zeigt alle verfuegbaren contexts an
+kubectl config use-context production       wechselt zu gewuenschtem context
+kubectl apply -f mongo-config.yaml          aus yaml erstellen... immer in der reihenfolge, sodass ressourcen, auf die zugegriffen werden soll, bereits existieren
+kubectl get all                             im laufenden clustern nach allem suchen ausser secret und configmap
+kubectl get pods -o wide                    im laufenden clustern nach pods suchen und tiefere Infos anzeigen
+kubectl get secret                          im laufenden clustern nach secrets suchen
+kubectl get configmap                       im laufenden clustern nach configmaps suchen
+kubectl get svc                             im laufenden clustern nach services suchen
+kubectl logs agent-alpha-7f8478bf67-2t8nn   logs bekommen von pod name agent-alpha-7f8478bf67-2t8nn
+kubectl port-forward svc/agent-alpha-service 50000:50000
+                                            temporaere Portweiterleitung von 50000 auf lokalem rechner auf 50000 vom genannten service
+kubectl exec deployment/agent-beta -c agent -- python -c \"print('Test')"
+                                            python befehl in container ausfuehren
+kubectl exec -it deployment/agent-beta -c agent -- bash
+                                            shell in container oeffnen, -it: interactive terminal, -c: container, davor das pod deployment
+curl -X post http://localhost:50000 --data "Hallo"
+                                            curl ist http request, -X POST heißt wir posten (REST), an den server die Daten "Hallo"                                       
+
+
+
+
+
+context:
+  cluster: production
+  user: milan
+  namespace: development

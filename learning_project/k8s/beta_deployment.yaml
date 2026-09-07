@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-beta
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      agent: beta
+
+  template:
+    metadata:
+      labels:
+        agent: beta
+
+    spec:
+      containers:
+        - name: agent
+          image: agent-image:1.0
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 50000
+
+          env:
+            - name: AGENT_NAME
+              value: beta
+
+            - name: TARGET_HOST
+              value: agent-alpha-service

@@ -1,0 +1,43 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: webapp-route
+  namespace: default
+spec:
+
+  # Gibt an, zu welchem Gateway diese Route gehoert.
+  parentRefs:
+    - name: web-gateway
+
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /beta
+
+      filters: #hiermit wird der beta prefix aus der url entfernt, bevor die msg weitergleitet wird, das ist wichtig um z.b. fastapi nicht zu verwirren
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /
+      # Traffic, der die obige Regel erfuellt,
+      # wird an diesen Kubernetes Service weitergeleitet.
+      backendRefs:
+        - name: agent-beta-service
+          port: 50000
+
+    # /api soll an einen anderen Service gehen
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /alpha
+      filters: #hiermit wird der alpha prefix aus der url entfernt, bevor die msg weitergleitet wird
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /
+      backendRefs:
+        - name: agent-alpha-service
+          port: 50000

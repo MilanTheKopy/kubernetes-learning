@@ -1,0 +1,7 @@
+FROM debian:stable-slim
+
+RUN apt-get update && \
+    apt-get install -y tcpdump && \
+    rm -rf /var/lib/apt/lists/*
+
+CMD ["sh", "-c", "echo 'debug container running' && tcpdump -i any port 50000 -w /tmp/agents.pcap"]

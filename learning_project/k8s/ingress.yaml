@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 #wie wir nachher den url fuer fastapi bauen
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /ingress-alpha(/|$)(.*) #den pfad fuer fastapi zu saeubern ist hier schwieriger als beim gateway
+        pathType: ImplementationSpecific #anstatt Prefix wegen fastapi
+
+        backend:
+          service:
+            name: agent-alpha-service #an diesen service wird weitergeleitet
+            port:
+              number: 50000

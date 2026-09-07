@@ -1,0 +1,36 @@
+#hier wird ein deployment konfiguriert
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels: #all pods with all these labels belong to this depl. pods can have more labels but they need all these to match the depl
+    app: mongo
+spec:
+  replicas: 1 #how many pods are created from the blueprint
+  selector:
+    matchLabels:
+      app: mongo
+  template: #template is a blueprint for the pods, there is exactly one of "template" per depl
+    metadata:
+      labels:
+        app: mongo #a label can be the same for multiple pods of the same kind, optional for other things than pods
+    spec:
+      containers: #hier werden die container spezifiziert 
+      - name: mongodb
+        image: mongo:7.0 #https://hub.docker.com/_/mongo
+        ports:
+        - containerPort: 27017 #standard mongo port
+        env: #here we setz environment variables https://hub.docker.com/_/mongo gives info of how to set those
+        - name: MONGO_INITDB_ROOT_USERNAME
+          #value: myuser
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret #this is a yaml we defined
+              key: mongo-user #defined in the file
+
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          #value: myuser
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret #this is a yaml we defined
+              key: mongo-password #defined in the file

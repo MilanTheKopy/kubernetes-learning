@@ -1,0 +1,8 @@
+docker ps -a														zeigt laufende container, -a: auch gestoppte
+docker start pensive_newton											gestoppter container wieder gestartet
+docker rm pensive_newton											container zerstoeren
+docker ps -a --format '{{.ID}} {{.Names}}' | grep -v ' minikube$' | awk '{print $1}' | xargs -r docker rm		alle ausser bestimmten container zerstoeren
+docker build -t pythontest:1.0 . 									Sucht im aktuellen Verzeichnis (.) nach dem Dockerfile und baut daraus ein Image mit Name pythontest und Tag 1.0.
+docker images														zeigt alle gebuildeten Images
+docker run -it -d -p 50000:50000 pythontest:1.0						-it gibt inputs frei, -p mapped den port 50000 des containers aus denselben im localhost, -d für detached from console
+Test-NetConnection localhost -Port 50000							damit laesst sich in windows powershell testen, ob da nun tatsaechlich jemand lauscht

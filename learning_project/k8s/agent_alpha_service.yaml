@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-alpha-service
+spec:
+  selector:
+    agent: alpha                #Schicke Traffic an Pods mit dem Label agent=alpha.
+  ports:
+    - protocol: TCP             #hier muss ein transortprotokoll stehen, also UDP oder TCP, nicht HTTP
+      port: 50000
+      targetPort: 50000

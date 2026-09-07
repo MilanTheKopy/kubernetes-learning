@@ -1,0 +1,17 @@
+# https://kubernetes.io/docs/concepts/services-networking/gateway/
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: web-gateway
+  namespace: default #By default, a Gateway only accepts Routes from the same namespace. Cross-namespace Routes require configuring 
+spec:
+  #addresses: Oft laesst man addresses zunaechst sogar weg und laesst den Controller die Adresse bereitstellen
+    #- type: IPAddress
+    #  value: 192.168.1.100
+  gatewayClassName: nginx #bestimmt welche Gateway-Implementierung bzw. welcher Controller dieses Gateway verwaltet
+  listeners:              #was wird clientseitig angenommen? in einer route, welche hierauf bezug nimmt, werden dann die details geklaert
+    - name: http
+      protocol: HTTP
+      port: 80
+
+

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo #this label is defined for the pods in mongo.yaml, so the service knows whose messages it is supposed to forward
+  ports: 
+    - protocol: TCP
+      port: 27017 #port des services, worüber dieser vom master angesprochen wird, es ist schuoen den targetportdafuer zu nehmen muss aber nicht
+      targetPort: 27017 #has to be the same as the container port, port zur kommunikation mit den anzusprechenden pods
