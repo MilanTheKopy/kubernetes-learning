@@ -49,6 +49,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
+if AGENT_NAME == "alpha":
+    print(f"{AGENT_NAME} writes file")
+    with open("/data/myfile.txt", "w") as f: #path bezieht sich auf mountPath: /data siehe deployment
+        f.write("nfs found by agent\n")
+    print(f"{AGENT_NAME} wrote file")
+
 class Message(BaseModel):
     sender: str
     message: str

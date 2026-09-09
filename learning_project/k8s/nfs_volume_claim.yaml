@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: agent-pvc
+spec:
+  storageClassName: "" # das ist mandatory weil sonst wird es auf standard gesetzt und der macht dynamisches Provisioning
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

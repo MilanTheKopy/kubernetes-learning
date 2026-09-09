@@ -30,9 +30,18 @@ spec:
 
             - name: TARGET_HOST
               value: agent-beta-service
+
+          volumeMounts:
+          - name: agent-storage
+            mountPath: /data
         
         - name: debug
           image: debug-image:1.0
           imagePullPolicy: Never
+
+      volumes:
+      - name: agent-storage
+        persistentVolumeClaim:
+          claimName: agent-pvc
 
 
